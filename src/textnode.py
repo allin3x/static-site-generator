@@ -5,12 +5,12 @@ class TextType(Enum):
     '''
         TextType Class to handle Types of Text.
     '''
-    TEXT = "plain"
+    TEXT = "text"
     BOLD = "bold"
     ITALIC = "italic"
     CODE = "code"
     LINK = "link"
-    IMG = "img"
+    IMAGE = "image"
 
 class TextNode():
     '''
@@ -30,7 +30,6 @@ class TextNode():
         return f"TextNode({self.text}, {self.text_type}, {self.url})"
 
 def text_node_to_html_node(text_node):
-    # your implementation here
     if text_node.text_type == TextType.TEXT:
         return LeafNode(None, text_node.text)
     elif text_node.text_type == TextType.BOLD:
@@ -44,11 +43,11 @@ def text_node_to_html_node(text_node):
             'href' : text_node.url
         }
         return LeafNode("a", text_node.text, props)
-    elif text_node.text_type == TextType.IMG:
+    elif text_node.text_type == TextType.IMAGE:
         props = {
             "alt" : text_node.text,
             "src" : text_node.url
         }
-        return LeafNode("img", "", props)
+        return LeafNode("image", "", props)
     else:
         raise ValueError("Text_node to HTML input Wrong")

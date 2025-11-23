@@ -15,7 +15,7 @@ class TestTextNode(unittest.TestCase):
         plain_node = TextNode("Text Node", TextType.TEXT)
         code_node = TextNode("Test Node", TextType.CODE)
         link_node = TextNode("Test Node", TextType.LINK)
-        img_node = TextNode("Test Node", TextType.IMG)
+        img_node = TextNode("Test Node", TextType.IMAGE)
 
         url_node = TextNode("Bold Node", TextType.BOLD, "www.google.at")
 
