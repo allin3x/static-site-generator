@@ -39,11 +39,8 @@ def generate_page(from_path, template_path, dest_path, basepath):
     template = template.replace("{{ Title }}", title)
     template = template.replace("{{ Content }}", html_string)
 
-    basepath_href = f'href="{basepath}"'
-    template = template.replace('href="/"', basepath_href)
-
-    basepath_src = f'src="{basepath}"'
-    template = template.replace('src="/"', basepath_src)
+    template = template.replace('href="/', f'href="{basepath}')
+    template = template.replace('src="/', f'src="{basepath}')
 
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
     with open(dest_path, "w", encoding="utf-8") as f:
