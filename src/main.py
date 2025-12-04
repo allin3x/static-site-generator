@@ -3,6 +3,27 @@ import shutil
 from markdown_blocks import markdown_to_html_node
 
 
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    list_dir = os.listdir(dir_path_content)
+
+    for item in list_dir:
+        # if item is a file -> Copy
+        fullpath_item = os.path.join(dir_path_content, item)
+        dest_path = os.path.join(dest_dir_path, item)
+
+        # Path is File
+        if os.path.isfile(fullpath_item):
+            # print(f"File {fullpath_item}")
+            if fullpath_item.endswith(".md"):
+                html_dest_path = dest_path.replace(".md", ".html")
+                generate_page(fullpath_item, template_path, html_dest_path)
+        # Path is Dir
+        elif os.path.isdir(fullpath_item):
+            os.makedirs(dest_path, exist_ok=True)
+            generate_pages_recursive(fullpath_item, template_path, dest_path)
+            # print(f"Dir: {fullpath_item}")
+
+
 def generate_page(from_path, template_path, dest_path):
     print(f"Generating Page from {from_path} to {dest_path} using {template_path}")
     with open(from_path, "r", encoding="utf-8") as f:
@@ -25,8 +46,8 @@ def generate_page(from_path, template_path, dest_path):
 def extract_title(markdown: str):
     markdown_list = markdown.split("\n")
     for item in markdown_list:
-        print(f"Item: {item[2:]}")
-        print(f"Item (repr): {repr(item[2:])}")
+        # print(f"Item: {item[2:]}")
+        # print(f"Item (repr): {repr(item[2:])}")
         if item.startswith("# "):
             return item[2:].strip()
     raise ValueError("No H1 Header in Markdown")
@@ -59,27 +80,7 @@ def copy_content(src, dest):
 def main():
     clean_folder("public")
     copy_content("static", "public")
-    generate_page("content/index.md", "template.html", "public/index.html")
-    generate_page(
-        "content/blog/glorfindel/index.md",
-        "template.html",
-        "public/blog/glorfindel/index.html",
-    )
-    generate_page(
-        "content/blog/tom/index.md",
-        "template.html",
-        "public/blog/tom/index.html",
-    )
-    generate_page(
-        "content/blog/majesty/index.md",
-        "template.html",
-        "public/blog/majesty/index.html",
-    )
-    generate_page(
-        "content/contact/index.md",
-        "template.html",
-        "public/contact/index.html",
-    )
+    generate_pages_recursive("content", "template.html", "public")
 
 
 if __name__ == "__main__":
